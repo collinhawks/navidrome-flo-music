@@ -1,12 +1,12 @@
 # Use official Navidrome image as base
 FROM deluan/navidrome:latest
 
-# Install rclone and curl (for backup sync)
-RUN apk add --no-cache rclone curl
+# Install rclone and busybox (for HTTP server)
+RUN apk add --no-cache rclone busybox-extras curl
 
-# Copy in your custom startup script
+# Copy startup and backup scripts
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY backup.sh /backup.sh
+RUN chmod +x /entrypoint.sh /backup.sh
 
-# Render will automatically call this on startup
 ENTRYPOINT ["/entrypoint.sh"]
