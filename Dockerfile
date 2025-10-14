@@ -5,10 +5,8 @@ RUN apk add --no-cache rclone
 
 # Create a debug script
 RUN echo '#!/bin/sh
-set -x  # Enable debug output
-
 echo "Environment variables:"
-echo "S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:0:10}..."  # Show first 10 chars
+echo "S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:0:10}..."  
 echo "S3_ENDPOINT: $S3_ENDPOINT"
 echo "S3_BUCKET: $S3_BUCKET"
 
