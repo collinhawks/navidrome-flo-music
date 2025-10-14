@@ -12,6 +12,7 @@ services:
         value: "/data"
       - key: ND_PORT
         value: "4533"
-      - key: ND_BASEURL
-        value: "/"
-    healthCheckPath: /login
+    disk:
+      name: navidrome-data
+      mountPath: "/data"
+      sizeGB: 1
