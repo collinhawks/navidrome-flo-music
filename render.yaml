@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: navidrome
+    env: docker
+    plan: free
+    docker:
+      dockerfile: Dockerfile
+    envVars:
+      - key: ND_PORT
+        value: "8080"
+    healthCheckPath: /login
