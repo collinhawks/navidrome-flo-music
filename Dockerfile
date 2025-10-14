@@ -3,7 +3,7 @@ FROM deluan/navidrome:latest
 # Install rclone and curl
 RUN apk add --no-cache rclone curl
 
-# Create main entrypoint
+# Create entrypoint script line by line
 RUN echo '#!/bin/sh' > /entrypoint.sh
 RUN echo 'set -e' >> /entrypoint.sh
 RUN echo '' >> /entrypoint.sh
@@ -43,4 +43,5 @@ RUN echo 'done' >> /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-CMD ["/entrypoint.sh"]
+# Use shell form instead of exec form
+CMD /entrypoint.sh
