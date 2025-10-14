@@ -1,7 +1,18 @@
+FROM alpine:latest as rclone-installer
+
+# Install rclone in a separate stage
+RUN apk add --no-cache curl && \
+    curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
+    unzip rclone-current-linux-amd64.zip && \
+    cd rclone-*-linux-amd64 && \
+    cp rclone /usr/local/bin/
+
 FROM deluan/navidrome:latest
 
-# Install rclone from Debian repositories (more stable)
-RUN apt-get update && apt-get install -y rclone fuse
+# Install fuse and copy rclone from the previous stage
+RUN apt-get update && apt-get install -y fuse
+
+COPY --from=rclone-installer /usr/local/bin/rclone /usr/local/bin/rclone
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
