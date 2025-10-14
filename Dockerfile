@@ -50,5 +50,5 @@ RUN echo 'done' >> /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
-# Use CMD instead of ENTRYPOINT
-CMD ["/entrypoint.sh"]
+# Use shell form instead of exec form
+ENTRYPOINT /entrypoint.sh
