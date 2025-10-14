@@ -6,6 +6,12 @@ services:
     docker:
       dockerfile: Dockerfile
     envVars:
+      - key: ND_MUSICFOLDER
+        value: "/music"
+      - key: ND_DATAFOLDER  
+        value: "/data"
       - key: ND_PORT
         value: "4533"
+      - key: ND_BASEURL
+        value: "/"
     healthCheckPath: /login
