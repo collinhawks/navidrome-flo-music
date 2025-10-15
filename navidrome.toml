@@ -1,0 +1,28 @@
+# Navidrome Configuration File
+
+# Server settings
+Address = "0.0.0.0"
+Port = 4533
+
+# Paths
+MusicFolder = "/music"
+DataFolder = "/data"
+
+# Scanner settings
+ScanSchedule = "@every 24h"
+AutoImportPlaylists = true
+
+# Performance settings
+TranscodingCacheSize = "500MB"
+ImageCacheSize = "500MB"
+
+# Session timeout (in minutes)
+SessionTimeout = "24h"
+
+# Enable additional features
+EnableSharing = true
+EnableDownloads = true
+EnableExternalServices = true
+
+# Log level (options: error, info, debug, trace)
+LogLevel = "info"
