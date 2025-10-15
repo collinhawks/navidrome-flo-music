@@ -1,12 +1,25 @@
-# Use official Navidrome image as base
 FROM deluan/navidrome:latest
 
-# Install rclone and busybox (for HTTP server)
-RUN apk add --no-cache rclone busybox-extras curl
+# Install rclone for B2 sync and other utilities
+USER root
+RUN apk add --no-cache rclone curl bash sqlite
 
-# Copy startup and backup scripts
-COPY entrypoint.sh /entrypoint.sh
-COPY backup.sh /backup.sh
-RUN chmod +x /entrypoint.sh /backup.sh
+# Create necessary directories
+RUN mkdir -p /data /music /backup /scripts
 
-ENTRYPOINT ["/entrypoint.sh"]
+# Copy scripts
+COPY entrypoint.sh /scripts/entrypoint.sh
+COPY backup.sh /scripts/backup.sh
+COPY restore.sh /scripts/restore.sh
+
+# Make scripts executable
+RUN chmod +x /scripts/*.sh
+
+# Set working directory
+WORKDIR /app
+
+# Switch back to navidrome user
+USER navidrome
+
+# Use custom entrypoint
+ENTRYPOINT ["/scripts/entrypoint.sh"]
