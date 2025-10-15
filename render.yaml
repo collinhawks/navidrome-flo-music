@@ -1,18 +1,18 @@
+
 services:
   - type: web
     name: navidrome
     env: docker
     plan: free
-    docker:
-      dockerfile: Dockerfile
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     envVars:
-      - key: ND_MUSICFOLDER
-        value: "/music"
-      - key: ND_DATAFOLDER  
-        value: "/data"
-      - key: ND_PORT
-        value: "4533"
-    disk:
-      name: navidrome-data
-      mountPath: "/data"
-      sizeGB: 1
+      - key: B2_KEY_ID
+        value: 005af1a68370caf0000000001
+      - key: B2_APPLICATION_KEY
+        sync: false  # Set this in Render dashboard for security
+      - key: B2_BUCKET_NAME
+        value: navidrome-flo-music
+      - key: PORT
+        value: 4533
+    healthCheckPath: /
