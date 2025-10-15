@@ -16,7 +16,7 @@ rclone copy b2:${B2_BUCKET}/navidrome-database /data || echo "No existing databa
 
 # Sync music files from B2 (skips already-synced songs)
 echo "🎵 Syncing music files..."
-rclone sync b2:${B2_BUCKET}/your-music-folder /music || echo "Music sync failed or empty."
+rclone sync b2:${B2_BUCKET}/music /music || echo "Music sync failed or empty."
 
 # Start Navidrome
 echo "🚀 Starting Navidrome..."
