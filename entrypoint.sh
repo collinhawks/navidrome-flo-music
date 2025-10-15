@@ -6,7 +6,7 @@ echo "Navidrome Startup with B2 Integration"
 echo "=========================================="
 
 # Ensure directories exist with proper permissions
-mkdir -p /data /music /home/navidrome/.config/rclone
+mkdir -p /data /music /root/.config/rclone
 
 # Check required environment variables
 if [ -z "$B2_KEY_ID" ] || [ -z "$B2_APPLICATION_KEY" ] || [ -z "$B2_BUCKET_NAME" ]; then
@@ -18,7 +18,7 @@ fi
 # Configure rclone for BackBlaze B2
 echo "Configuring rclone for BackBlaze B2..."
 
-cat > /home/navidrome/.config/rclone/rclone.conf <<EOF
+cat > /root/.config/rclone/rclone.conf <<EOF
 [b2]
 type = b2
 account = ${B2_KEY_ID}
