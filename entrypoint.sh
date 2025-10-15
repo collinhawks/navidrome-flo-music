@@ -1,0 +1,62 @@
+#!/bin/bash
+set -e
+
+echo "=========================================="
+echo "Navidrome Startup with B2 Integration"
+echo "=========================================="
+
+# Configure rclone for BackBlaze B2
+echo "Configuring rclone for BackBlaze B2..."
+mkdir -p /home/navidrome/.config/rclone
+
+cat > /home/navidrome/.config/rclone/rclone.conf <<EOF
+[b2]
+type = b2
+account = ${B2_KEY_ID}
+key = ${B2_APPLICATION_KEY}
+hard_delete = false
+EOF
+
+echo "✓ rclone configured"
+
+# Test B2 connection
+echo "Testing B2 connection..."
+if rclone lsd b2:${B2_BUCKET_NAME} > /dev/null 2>&1; then
+    echo "✓ B2 connection successful"
+else
+    echo "✗ B2 connection failed. Please check your credentials."
+    exit 1
+fi
+
+# Restore database and data from B2 if exists
+echo "Checking for existing database backup..."
+if rclone lsf b2:${B2_BUCKET_NAME}/navidrome-database/navidrome.db > /dev/null 2>&1; then
+    echo "Found existing database, restoring..."
+    /scripts/restore.sh
+else
+    echo "No existing database found, starting fresh..."
+fi
+
+# Sync music folder from B2 (only download what's missing)
+echo "Syncing music library from B2..."
+echo "This may take a while on first run..."
+rclone sync b2:${B2_BUCKET_NAME}/music /music \
+    --transfers 4 \
+    --checkers 8 \
+    --fast-list \
+    --use-server-modtime \
+    --log-level INFO
+
+echo "✓ Music library synced"
+
+# Create backup before starting
+echo "Creating startup backup..."
+if [ -f /data/navidrome.db ]; then
+    /scripts/backup.sh
+fi
+
+# Start Navidrome
+echo "=========================================="
+echo "Starting Navidrome..."
+echo "=========================================="
+exec /app/navidrome --configfile "/data/navidrome.toml"
