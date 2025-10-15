@@ -5,9 +5,18 @@ echo "=========================================="
 echo "Navidrome Startup with B2 Integration"
 echo "=========================================="
 
+# Ensure directories exist with proper permissions
+mkdir -p /data /music /home/navidrome/.config/rclone
+
+# Check required environment variables
+if [ -z "$B2_KEY_ID" ] || [ -z "$B2_APPLICATION_KEY" ] || [ -z "$B2_BUCKET_NAME" ]; then
+    echo "ERROR: Missing required environment variables!"
+    echo "Please set: B2_KEY_ID, B2_APPLICATION_KEY, B2_BUCKET_NAME"
+    exit 1
+fi
+
 # Configure rclone for BackBlaze B2
 echo "Configuring rclone for BackBlaze B2..."
-mkdir -p /home/navidrome/.config/rclone
 
 cat > /home/navidrome/.config/rclone/rclone.conf <<EOF
 [b2]
@@ -59,4 +68,13 @@ fi
 echo "=========================================="
 echo "Starting Navidrome..."
 echo "=========================================="
-exec /app/navidrome --configfile "/data/navidrome.toml"
+
+# Set environment variables for Navidrome
+export ND_MUSICFOLDER=/music
+export ND_DATAFOLDER=/data
+export ND_LOGLEVEL=info
+export ND_PORT=${PORT:-4533}
+export ND_BASEURL=""
+
+# Start Navidrome with exec to replace the shell process
+exec /app/navidrome
